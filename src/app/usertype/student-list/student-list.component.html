@@ -1,0 +1,57 @@
+<div class="datalist">
+  <!-- <mat-form-field appearance="outline" fxLayoutAlign="center">
+    <mat-label>Filter Date</mat-label>
+    <input matInput placeholder="Date"  [(ngModel)]="searchKey">
+    <mat-icon matPrefix>date_range</mat-icon>
+  </mat-form-field> -->
+  
+  <mat-form-field class="example-full-width" appearance="outline" style="width:150px;" fxLayoutAlign="center">
+    <mat-label>Filter Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="searchKey" (keyUp)="applyFilter()" >
+    <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker [dateClass]="dateClass" #picker></mat-datepicker>
+    <button mat-button matSuffix mat-icon-button aira-label="clear" *ngIf="searchKey" (click)="onSearchClear()">
+      <mat-icon>close</mat-icon></button>    
+  </mat-form-field>
+
+<table mat-table class="mat-elevation-z8" [dataSource]="studentData"  >
+  
+    <ng-container matColumnDef="No.">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell  *matCellDef="let item; let i = index">{{ (paginatorRef.pageIndex * paginatorRef.pageSize) + (i + 1) }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Date">
+      <th  mat-header-cell *matHeaderCellDef> Date</th>
+      <td  mat-cell *matCellDef="let element">{{element.Date}}  </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="StudentClass">
+      <th  mat-header-cell *matHeaderCellDef> Class</th>
+      <td  mat-cell *matCellDef="let element">{{element.studentClass}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="StudentName">
+      <th  mat-header-cell *matHeaderCellDef>Total Student </th>
+      <td  mat-cell *matCellDef="let element">{{element.studentName}} </td>
+    </ng-container>
+    <ng-container matColumnDef="loading">
+      <mat-footer-cell *matFooterCellDef colspan="6"> 
+        loading data...
+      </mat-footer-cell>
+    </ng-container>
+    <ng-container matColumnDef="noData">
+      <mat-footer-cell *matFooterCellDef colspan="6"> 
+      No data.
+      </mat-footer-cell>
+    </ng-container>
+  
+     <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr> 
+     <tr mat-row  *matRowDef="let row; columns: displayedColumns;"></tr>
+    <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':studentData!=null} "></mat-footer-row>
+    <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(studentData!=null && studentData.data.length==0)}"></mat-footer-row>
+  </table>
+  <mat-paginator  #paginatorRef [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+</div>
+
+

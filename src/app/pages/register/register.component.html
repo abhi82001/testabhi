@@ -1,0 +1,85 @@
+<div class="signup-form" >
+    <form action="#" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <h2>Register</h2>
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>First Name</mat-label>
+                        <input matInput placeholder="Placeholder" formControlName="firstname">
+                        <mat-icon matSuffix>person</mat-icon>
+                        <mat-error>*Required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Last Name</mat-label>
+                        <input matInput placeholder="Placeholder" formControlName="lastname">
+                        <mat-icon matSuffix>person</mat-icon>
+                        <mat-error>*Required</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-select placeholder="Select me" [(ngModel)]="selectedUser" formControlName="usertype" #role>
+                            <mat-option [value]="user.value" *ngFor="let user of users">{{user.value}} </mat-option>
+                        </mat-select>
+                        <mat-error>*Required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label> {{selectedUser}} Name</mat-label>
+                        <mat-icon matPrefix>corporate_fare</mat-icon>
+                        <input matInput placeholder="Placeholder" formControlName="selecteduser">
+                        <mat-hint>Ex: DonBosco</mat-hint>
+                        <mat-error>*Required</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="mail" hintLabel="Ex:abc@gmail.com" appearance="outline">
+                    <mat-label>E-Mail</mat-label>
+                    <mat-icon matPrefix>send</mat-icon>
+                    <input matInput placeholder="E-mail"  #userEmail formControlName="email">
+                    <mat-error align="end">Please Enter Valid Email</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Password</mat-label>
+                            <mat-icon matPrefix>lock</mat-icon>
+                            <input type="password" #input  #userPassword maxlength="15" minlength="6" matInput placeholder="password"
+                                formControlName="password">
+                            <mat-hint align="end">{{input.value?.length || 0}}/15</mat-hint>
+                            <mat-error>*Required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+
+                    <div class="col">
+                        <mat-form-field hintLabel="Must Same" appearance="outline">
+                            <mat-label>Password (Confirm)</mat-label>
+                            <mat-icon matPrefix>lock</mat-icon>
+                            <input type="password" #confirminput #userPassword maxlength="15" minlength="6" matInput
+                                placeholder="password" formControlName="confirmpassword">
+                            <mat-hint align="end">{{confirminput.value?.length || 0}}/15</mat-hint>
+                            <mat-error>*Required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button mat-raised-button color="primary" (click)="authService.SignUp(userEmail.value, userPassword.value, role.value)">Register</button>
+                <div class="text-center">Already have an account? <a routerLink="/login" >Sign in</a></div>
+            </div>
+        </div>
+    </form>
+</div>

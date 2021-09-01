@@ -1,0 +1,7 @@
+.container{
+    padding-top: 50px;
+}
+mat-card{
+    width: 40%;
+    text-align: center;
+}
