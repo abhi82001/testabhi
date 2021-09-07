@@ -1,15 +1,12 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CrudService } from 'src/app/shared/crud-services/crud.service';
-import Swal from 'sweetalert2';
-import { Class, Student, User } from 'src/app/shared/model/student.model';
+import { Class, Student} from 'src/app/shared/model/student.model';
 import { AngularFireList } from '@angular/fire/database';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
+// import { MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatCalendarCellClassFunction} from '@angular/material/datepicker';
-import { add } from 'lodash';
 
 
 
@@ -20,12 +17,13 @@ import { add } from 'lodash';
   encapsulation: ViewEncapsulation.None,
 })
 export class SchooluserComponent implements OnInit {
+  
   displayedColumns: string[] = ['No.', 'StudentClass', 'StudentName', 'Date' ,'Action'];
   students: Student[] = [];
   Student: Student = new Student();
   formSubmitted?: boolean;
   updateStudent: boolean = false;
-  studentId? = null;
+  studentId = '';
   isDelete?: boolean;
   StudentName! : string;
   StudentClass!: any;
@@ -42,6 +40,7 @@ dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
 
   return '';
 }
+
 //===========================================================//
 
   classes: Class[] = [
@@ -61,11 +60,11 @@ dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
   // studentForm!: FormGroup;
 
   StudentList!: AngularFireList<any>;
-  dialogConfig!: MatDialogConfig<any>;
+  // dialogConfig!: MatDialogConfig<any>;
   constructor(
     public service: CrudService, 
     public angularFirestore:AngularFirestore,
-    public dialog: MatDialog
+    // public dialog: MatDialog
 
     ) {this.getAllStudent();}
   submitted!: boolean;
@@ -78,9 +77,10 @@ dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
 }
 getAllStudent() {
   this.service.getAllStudent().subscribe((data: any)=>{
-    this.students = data.map((e: { payload: { doc: { key: any; data: () => any; }; }; }) => {
+    console.log(data)
+    this.students = data.map((e: { payload: { doc: { id: any; data: () => any; }; }; }) => {
       return {
-        $key:e.payload.doc.key,
+        $key:e.payload.doc.id,
         ...e.payload.doc.data()
       }as Student;
     });
@@ -90,47 +90,18 @@ getAllStudent() {
   });
 }
 
-// onSubmit(f:any) {
-//   if(f.form.valid){
-//     if(this.studentId == null){
-//       this.service.addStudentInforamtion({
-//         studentClass: this.Student.studentClass,
-//         studentName: this.Student.studentName
-//       })
-//     }else{
-//       this.service.updateStudent({
-//         // StudentClass: this.Student.studentClass,
-//         // studentName: this.Student.studentName
-//       })
-//     }
-//     this.Student = new Student();
-//     f.submitted = false;
-//     this.formSubmitted = true;
-//     this.updateStudent = false;
-//     setInterval(()=>{
-//       this.formSubmitted = false;
-//     }, 2000)
-//   }
-// }
 
-// onSubmit(){
-//   if(this.service.form.valid){
-//       if(!this.service.form.controls['$key'].value  == null)
-//       this.service.addStudentInformation(this.service.form.value);
-//         else
-//         this.service.updateStudentInformation(this.service.form.value);
-//     this.service.form.reset();
-//     this.service.initializeFormGroup();
-//   }
-// }
 
 onSubmit(){
+  console.log(this.service.form.value)
   
-  this.angularFirestore.collection("Student").doc().set({
-    studentClass: '',
-    studentName: '',
-    date: ''
+  const docid = this.service.form.value.$key ? this.service.form.value.$key : this.angularFirestore.createId()
+  this.angularFirestore.collection("Student").doc(docid).set({
+    studentClass: this.service.form.value.studentClass,
+    studentName: this.service.form.value.studentName,
+    Date: this.service.form.value.Date,
   }).then(()=> {
+    this.service.form.reset()
     console.log("Document successfully written!")
     
   }).catch((error) => {
@@ -139,20 +110,24 @@ onSubmit(){
 
 }
 
+
+
+
+
 onEdit(row:string){
   this.service.populateForm(row);
-  console.log(row, "edited")
 }
  
-// ondelete($key:any){
-//   this.service.deleteStudent($key);
-//       console.log($key)
-//     }
 
-ondelete(){
-  this.angularFirestore.collection('Student').doc('$key').delete()
-  .then(()=> {
+
+ondelete(index:number){
+  this.angularFirestore.doc('Students/'+index).delete()
+  .then((res:any)=> {
     console.log("Document successfully deleted!");
+    this.students.splice(index,1);
+    this.studentData = new MatTableDataSource(this.students)
+  this.studentData.paginator = this.paginator;
+
   }).catch((error) => {
       console.error("Error removing document: ", error);
   
@@ -163,7 +138,9 @@ ondelete(){
 
 
 
-// const dialogConfig = new MatDialogConfig();
-  // dialogConfig.disableClose = true;
-  // dialogConfig.autoFocus= true;
-  // this.dialog.open(DialogBoxComponent)
+
+
+
+
+
+

@@ -40,7 +40,7 @@ import { AuthService } from './shared/authservice/auth.service';
 import { CrudService } from './shared/crud-services/crud.service';
 import { NgoHomePageComponent } from './usertype/ngo-home-page/ngo-home-page.component';
 import { StudentListComponent } from './usertype/student-list/student-list.component';
-import { DialogBoxComponent } from './usertype/dialog-box/dialog-box.component';
+
 
 @NgModule({
   declarations: [
@@ -53,8 +53,7 @@ import { DialogBoxComponent } from './usertype/dialog-box/dialog-box.component';
     VerifyEmailComponent,
     NavBarComponent,
     NgoHomePageComponent,
-    StudentListComponent,
-    DialogBoxComponent
+    StudentListComponent
   ],
   imports: [
     BrowserModule,
@@ -78,7 +77,6 @@ import { DialogBoxComponent } from './usertype/dialog-box/dialog-box.component';
 
   ],
   providers: [AuthService, CrudService],
-  bootstrap: [AppComponent],
-  entryComponents: [DialogBoxComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

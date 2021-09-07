@@ -161,33 +161,3 @@ provider in Firestore database using AngularFirestore + AngularFirestoreDocument
 }
 
 
-
-// SignIn(email: string, password: string){
-//   return this.afAuth.signInWithEmailAndPassword(email,password)
-//   .then((result)=> {
-//     this.ngZone.run(()=> {
-//       this.afs.collection('/users').doc(result.user?.uid).get().toPromise()
-//        .then((doc) => {
-//         if (doc.exists) {
-//             console.log("Document data:", doc.data());
-//             let data:User = doc.data() as User
-//              if (data.role && data.role == 'School'){
-//                 this.router.navigate(['/'])
-//              }else {
-//               this.router.navigate(['/ngouser'])
-//              }
-//         } else {
-//             // doc.data() will be undefined in this case
-//             console.log("No such document!");
-//         }
-//         // this.SetUserData(result.user);
-//     }).catch((error) => {
-//       window.alert(error.message)
-//       // Swal.fire(error.message)
-//       console.log("Error getting document:", error);
-//     });
-//       });
-//       Swal.fire('Successfully Logged-In')
-//     });
-
-// }

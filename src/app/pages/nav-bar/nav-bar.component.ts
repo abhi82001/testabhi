@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/shared/authservice/auth.service';
 import { User } from 'src/app/shared/authservice/user';
 @Component({
@@ -14,15 +14,26 @@ export class NavBarComponent implements OnInit {
   role: string ='';
   
   
-  constructor(public authService:AuthService, afAuth: AngularFireAuth) { }
+  constructor(public authService:AuthService, public afs: AngularFirestore,public afAuth: AngularFireAuth) { }
 
   ngOnInit(): void {
     this.loggedIn = this.authService.isLoggedIn
-   this.role = this.authService.role
-    }  
+    this.afAuth.authState.subscribe(user=>{
+     console.log(user)
+    this.afs.collection('/users').doc(user?.uid).get().toPromise()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+        let data: User = doc.data() as User
+        this.role = data.role
+     }
+   })  
+   })
  
+}
   toggleNavbar(){
     this.navbarOpen = !this.navbarOpen;
   }
 
 }
+

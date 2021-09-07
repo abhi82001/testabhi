@@ -1,8 +1,11 @@
+import { Timestamp } from "rxjs";
+
 export class Student {
-  id!:string;
+  $key!:string;
   studentName!: string;  
   studentClass!: string;
-  date!:number;
+  date!:Timestamp<any>;
+  datestring!:string;
 }
 
 export class User {
